@@ -20,27 +20,45 @@ struct product
 //
 int sizeOfProducts=4;
 struct product *products;
-
+int numPeople = 3;
 int sizeOfCart=2;
 struct product *cart;
 int cartItems=0;
 int productCounts=0;
-struct user people[50];
+struct user *people;
 int counts = 0;
 
 void main()
 {
     products = (struct product*)malloc(sizeOfProducts*sizeof(struct product));
     cart = (struct cart*)calloc(sizeOfCart,sizeof(struct product));
-struct user s={"amit123","admin","amantalreja123@gmail.com","123Aman4"};
+    people = (struct user*)calloc(numPeople,sizeof(struct user));
+// Adding accounts
+struct user s={"amit singh","admin","amit123@gmail.com","123Amit4"};
 people[counts]=s;
 counts++;
 struct user s1={"sunny","customer","sunny@gmail.com","12345678"};
 people[counts]=s1;
 counts++;
+struct user s3 = {"bhavesh kumar","customer","bhavesh@gmail.com","bhavesh1"};
+people[counts] = s3;
+counts++;
+// Adding initial products like amazon basics
+struct product p1 = {"Suit and Pant",29.99,"fashion","Especially for officers",0,productCounts+1};
+products[productCounts] = p1;
+productCounts++;
+struct product p2 = {"Dragon Toy",1.29,"plastic","Especially for toddlers",0,productCounts+1};
+products[productCounts] = p2;
+productCounts++;
+struct product p3 = {"3 tshirts",39.69,"fashion","3 at the price of one.",0,productCounts+1};
+products[productCounts] = p3;
+productCounts++;
+// Showing menu to vendor or customer
 showMenu();
+// Freeing dynamically created memory
 free(products);
 free(cart);
+free(people);
 }
 
 void showMenu()
@@ -59,13 +77,31 @@ void showMenu()
     printf(" ");
 printf("- ENTER 2 FOR MERCHANT   \n");
 int userInput;
+   // FOR ADDING VERTICAL SPACE
+ for(int i=0;i<5;i++)
+    printf("\n");
+// FOR ADDING HORIZONTAL SPACE
+ for(int k=0;k<40;k++)
+    printf(" ");
+ printf("Valid Ids \n\n");
+// FOR ADDING HORIZONTAL SPACE
+ for(int k=0;k<20;k++)
+    printf(" ");
+printf("For Merchant");
+printf("\n\n - email:amit123@gmail.com \n\n - password:123Amit4 \n\n");
+ for(int k=0;k<20;k++)
+    printf(" ");
+printf("For Customer");
+printf("\n\n - email:sunny@gmail.com \n\n - password:12345678 \n\n");
+
 printf("   ENTER : ");
 scanf("%d",&userInput);
 int status=-1;
-while(status!=1)
-{
+  while(status!=1)
+   {
     status = showForm(userInput);
-}
+   }
+
 }
 int showForm(int input)
 {
@@ -134,7 +170,9 @@ void showCustomerMenu(struct user u,struct product *arr,int len)
     printf(" ");
     printf("- ENTER 4 FOR CHECKING KART ITEMS");
     printf("\n\n - ENTER 5  TO CHECKOUT");
-
+    for(int k=0;k<60;k++)
+    printf(" ");
+    printf("- ENTER 6 TO CLEAR CART   \n");
     printf("\n\n\n - Quantity : %d",cartItems);
     showProducts(arr,productCounts);
     printf("\n\n   ENTER : ");
@@ -151,7 +189,11 @@ void showCustomerMenu(struct user u,struct product *arr,int len)
     if(input==2)
         addToCart(u,arr,len);
     if(input==3)
+    {
+        free(cart);
+        cart = (struct product*)calloc(sizeOfCart,sizeof(struct product));
         showMenu();
+    }
     if(input==4)
     {
         showProducts(cart,cartItems);
@@ -163,6 +205,15 @@ void showCustomerMenu(struct user u,struct product *arr,int len)
     if(input == 5)
     {
         checkout();
+    }
+    if(input==6)
+    {
+        free(cart);
+        cart=(struct product*)calloc(sizeOfCart,sizeof(struct product));
+        cartItems=0;
+        printf("\n - Cart Cleared\n - Press Any Key  ");
+        getch();
+        showCustomerMenu(u,arr,len);
     }
 }
 
@@ -260,10 +311,12 @@ void checkout()
     }
     printf(" - Platform Fee  =  0.25$\n");
     total+=0.25;
-    printf(" - total  =  %f",total);
+    printf(" - total  =  %f\n\n\n\n\n",total);
     }
+
     free(products);
     free(cart);
+     exit(0);
 }
 
 void showMerchantMenu(struct user u)
